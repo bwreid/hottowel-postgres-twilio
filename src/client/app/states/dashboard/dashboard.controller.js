@@ -9,10 +9,6 @@
   /* @ngInject */
   function DashboardController($q, dataservice, matchservice, logger) {
     var vm = this;
-    vm.news = {
-      title: 'hottowelPostgresTwilio',
-      description: 'Hot Towel Angular is a SPA template for Angular developers.'
-    };
     vm.people = [];
     vm.title = 'Dashboard';
 
