@@ -18,7 +18,7 @@
       </div>
 
       <div ng-repeat='p in vm.people'>
-        <div class="row" ng-hide='p.status !== undefined'>
+        <div class="row" ng-hide='p.yourPick !== undefined'>
           <div class="col-md-12">
             <div class="panel panel-default">
               <div class="panel-heading">
@@ -40,8 +40,8 @@
 
                   <div class="col-sm-3" style="text-align: center;">
                     <br/>
-                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="vm.selectPerson(p.username, true)">Let's Meet!</button>
-                    <button type="button" class="btn btn-default btn-lg btn-block" ng-click="vm.selectPerson(p.username, false)">Not Interested</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="vm.attemptMatch({ user: p, match: true })">Let's Meet!</button>
+                    <button type="button" class="btn btn-default btn-lg btn-block" ng-click="vm.attemptMatch({ user: p, match: false })">Not Interested</button>
                   </div>
                 </div>
               </div>
@@ -62,7 +62,7 @@
         <h4 class="modal-title" id="myModalLabel">It's a Match!</h4>
       </div>
       <div class="modal-body">
-        <h2>You and {{ vm.matchedPerson.name }} would like to chat!</h2>
+        <h2>You and {{ vm.matchedUser.name }} would like to chat!</h2>
         <p>Would you like to connect with them via text or email or both?</p>
         <p>(Alternatively, just close this popup).</p>
 
@@ -91,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" ng-click="vm.connectUsers(vm.matchedPerson)">Connect!</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.connectUsers()">Connect!</button>
       </div>
     </div>
   </div>

@@ -5,9 +5,9 @@
   .module('app.dashboard')
   .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['$q', 'dataservice', 'logger'];
+  DashboardController.$inject = ['$q', 'dataservice', 'matchservice', 'logger'];
   /* @ngInject */
-  function DashboardController($q, dataservice, logger) {
+  function DashboardController($q, dataservice, matchservice, logger) {
     var vm = this;
     vm.news = {
       title: 'hottowelPostgresTwilio',
@@ -30,59 +30,26 @@
       });
     }
 
-    vm.selectPerson = selectPerson;
-
-    function selectPerson (username, selection) {
-      var selected = vm.people.filter(function (person) {
-        return person.username == username;
-      })[0];
-
-      selected.status = selection;
-
-      if ( selected.status == selected.likesYou ) {
-        vm.matchedPerson = selected;
-        $('#myModal').modal('show');
-      }
+    vm.attemptMatch = function (options) {
+      options.modalID = '#myModal';
+      var response = matchservice.attemptMatch(options);
+      vm.matchedUser = response.user;
     }
 
-    vm.connectUsers = connectUsers;
-    
-    function connectUsers (user) {
-      var connectedUserEmail = $('#matchEmail').val();
-      var connectedUserPhone = $('#matchPhone').val();
-
-      vm.warnings = {};
-      if ( !(connectedUserEmail || connectedUserPhone) ) {
-        vm.warnings.required = 'Email or phone is required to send a message.'
-      }
-
-      if ( connectedUserEmail && !validator.isEmail(connectedUserEmail) ) {
-        vm.warnings.email = 'Your email is in an incorrect format.';
-      }
-
-      if ( connectedUserPhone && !validator.isEmail(connectedUserPhone) ) {
-        vm.warnings.phone = 'Your phone is in an incorrect format. (Only numbers)';
-      }
-
-      if ( !vm.warnings.length && ( connectedUserEmail || connectedUserPhone ) ) {
-        if ( connectedUserEmail ) {
-          console.log('Sending email to', connectedUserEmail);
-        }
-
-        if ( connectedUserPhone ) {
-          console.log('Sending text message to', connectedUserPhone);
-        }
-
-        if ( user ) {
-          if ( user.email ) {
-            console.log('Copying on the email', user.email);
-          }
-
-          if ( connectedUserPhone ) {
-            console.log('Copying on the email', connectedUserPhone);
-          }
-          
-        }
+    vm.connectUsers = function () {
+      var options = {
+        matchedUser : vm.matchedUser,
+        emailFieldID : '#matchEmail',
+        phoneFieldID : '#matchPhone'
+      };
+      
+      var response = matchservice.connectUsers(options);
+      
+      if ( response.warnings ) {
+        vm.warnings = response.warnings;  
+      } else {
+        logger.success('Sent a ' +response.success.join(' and ')+ 
+                       ' to ' +vm.matchedUser.name + '!');
         $('#myModal').modal('hide');
       }
     }
