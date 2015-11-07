@@ -1,50 +1,50 @@
 <section id="dashboard-view" class="mainbar">
   <section class="matter">
     <div class="container">
+      
       <div class="row">
         <div class="col-md-12">
           <h1>Connect</h1>
         </div>
       </div>
+      
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="widget wviolet">
             <div ht-widget-header title="People"
             allow-collapse="true"></div>
-            <div class="widget-content text-center text-info">
-              <table class="table table-condensed table-striped">
-                <thead>
-                  <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Age</th>
-                    <th>Location</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="p in vm.people">
-                    <td>{{p.firstName}}</td>
-                    <td>{{p.lastName}}</td>
-                    <td>{{p.age}}</td>
-                    <td>{{p.location}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="widget-foot">
-              <div class="clearfix"></div>
-            </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="widget wgreen">
-            <div ht-widget-header title="{{vm.news.title}}"
-            allow-collapse="true"></div>
-            <div class="widget-content text-center text-info">
-              <small>{{vm.news.description}}</small>
-            </div>
-            <div class="widget-foot">
-              <div class="clearfix"></div>
+      </div>
+
+      <div ng-repeat='p in vm.people'>
+        <div class="row" ng-hide='p.status !== undefined'>
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                 <h3 class="panel-title">{{ p.username }}</h3>
+               </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-sm-offset-1 col-sm-3" style="text-align: center;">
+                    <img src="{{ p.avatar }}" alt="Photo of {{ p.username }}" class="img-rounded">
+                  </div>
+
+                  <div class="col-sm-4" style="text-align: center;">
+                    <br/>
+                    <h3>{{ p.name }}</h3>
+                    <p><strong>{{ p.company.name }}</strong></p>
+                    <p>{{ p.company.catchPhrase }}</p>
+                    <p>{{ p.company.bs }}</p>
+                  </div>
+
+                  <div class="col-sm-3" style="text-align: center;">
+                    <br/>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="vm.selectPerson(p.username, true)">Let's Meet!</button>
+                    <button type="button" class="btn btn-default btn-lg btn-block" ng-click="vm.selectPerson(p.username, false)">Not Interested</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -52,3 +52,47 @@
     </div>
   </section>
 </section>
+
+<!-- Match Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">It's a Match!</h4>
+      </div>
+      <div class="modal-body">
+        <h2>You and {{ vm.matchedPerson.name }} would like to chat!</h2>
+        <p>Would you like to connect with them via text or email or both?</p>
+        <p>(Alternatively, just close this popup).</p>
+
+        <br/><hr/><br/>
+        <div ng-repeat="(errorType, message) in vm.warnings">
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>{{ errorType | uppercase }}:</strong> {{ message }}
+          </div>          
+        </div>
+
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" id="matchEmail" placeholder="Enter your email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-10">
+              <input type="phone" class="form-control" id="matchPhone" placeholder="Enter a mobile phone number">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.connectUsers(vm.matchedPerson)">Connect!</button>
+      </div>
+    </div>
+  </div>
+</div>
