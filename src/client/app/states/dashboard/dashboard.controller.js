@@ -27,6 +27,7 @@
     }
 
     vm.attemptMatch = function (options) {
+      vm.warnings = {};
       options.modalID = '#myModal';
       var response = matchservice.attemptMatch(options);
       vm.matchedUser = response.user;
@@ -40,14 +41,11 @@
       };
       
       var response = matchservice.connectUsers(options);
-      
-      if ( response.warnings ) {
-        vm.warnings = response.warnings;  
+      if ( response && response.warnings ) {
+        vm.warnings = response.warnings;
       } else {
-        logger.success('Sent a ' +response.success.join(' and ')+ 
-                       ' to ' +vm.matchedUser.name + '!');
         $('#myModal').modal('hide');
-      }
+      };
     };
   }
 })();

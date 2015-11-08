@@ -42,12 +42,10 @@
       var warnings = validateMatchInput(email, phone);
 
       if ( !(_.isEmpty(warnings)) ) {
-        var response = { warnings: warnings };
+        return { warnings: warnings };
       } else {
-        var response = sendMessages(email, phone, matchedUser);
+        sendMessages(email, phone, matchedUser);
       }
-
-      return response;
     }
 
 
@@ -70,26 +68,22 @@
 
     // fire off emails
     function sendMessages (email, phone, matchedUser) {
-      var response = { success: [] };
-      if ( email ) {
-        var opts = { to: [email] };
-        response.success.push('email');
-        $http.post('/messages/notifications/match', { email: true, messageOptions: opts }).
-              catch(function (error) {
-                return exception.catcher('XHR Failed for sendMessages')(error);
-              });
-      };
+      var options = {};
+      if ( email ) { options.email = true; options.emailOptions = { to: [email] }};
+      if ( phone ) { options.sms = true; options.smsOptions = { to: [phone] }};
 
-      if ( phone ) {
-        var opts = { to: [phone] };
-        response.success.push('text');
-        $http.post('/messages/notifications/match', { sms: true, messageOptions: opts }).
+      if ( email || phone ) {
+        $http.post('/messages/notifications/match', options).
+              then(function (body) {
+                var response = { success: [] };
+                if ( email ) { response.success.push('email') };
+                if ( phone ) { response.success.push('phone') };
+                return response;
+              }).
               catch(function (error) {
                 return exception.catcher('XHR Failed for sendMessages')(error);
               });
       }
-
-      return response;
     }
   }
 })();

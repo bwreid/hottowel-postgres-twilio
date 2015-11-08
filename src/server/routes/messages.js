@@ -4,22 +4,15 @@ var express             = require('express'),
     notificationsTexter = require('../texter/notifications');
 
 router.post('/notifications/match', function (req, res, next) {
-  var message;
   if ( req.body.email ) {
-    notificationsMailer.sendMatchEmail(req.body.messageOptions);
-    message = 'Email attempt.';
+    notificationsMailer.sendMatchEmail(req.body.emailOptions);
   }
   
   if ( req.body.sms ) {
-    notificationsTexter.sendMatchTexts(req.body.messageOptions);
-    message = 'Text attempt.';
+    notificationsTexter.sendMatchTexts(req.body.smsOptions);
   }
 
-  if ( !(req.body.email || req.body.sms) ) {
-    message = 'No message type specified.';
-  }
-
-  res.status(201).send(message);
+  res.send(201);
 });
 
 module.exports = router;
