@@ -1,4 +1,18 @@
 # hottowelPostgresTwilio
+An example application using HotTowel, Twilio, Nodemailer, and (maybe) PostgreSQL.
+
+To run locally with mailing and texting configured, enter in the following with your keys instead of the placeholders:
+
+```
+TWILIO_ACCOUNT_SID='KEY' \
+TWILIO_AUTH_TOKEN='KEY' \
+TWILIO_FROM_PHONE_NUMBER='KEY' \
+AMAZON_SES_ACCESS_KEY_ID='KEY' \
+AMAZON_SES_SECRET_ACCESS_KEY='KEY' \
+gulp serve-dev
+```
+
+* * *
 
 **Generated from HotTowel Angular**
 
