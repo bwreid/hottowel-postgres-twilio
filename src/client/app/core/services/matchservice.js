@@ -25,7 +25,7 @@
           likesYou = options.user.likesYou;
 
       var response = {};
-      if ( yourPick && (yourPick == likesYou) ) {
+      if ( yourPick && (yourPick === likesYou) ) {
         $(options.modalID).modal('show');
         response.user = options.user;
       }

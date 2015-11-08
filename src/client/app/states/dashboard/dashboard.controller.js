@@ -30,7 +30,7 @@
       options.modalID = '#myModal';
       var response = matchservice.attemptMatch(options);
       vm.matchedUser = response.user;
-    }
+    };
 
     vm.connectUsers = function () {
       var options = {
@@ -48,6 +48,6 @@
                        ' to ' +vm.matchedUser.name + '!');
         $('#myModal').modal('hide');
       }
-    }
+    };
   }
 })();

@@ -11,7 +11,7 @@
     routerHelper.configureStates(getStates(), otherwise);
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
-      var isLogin = ( toState.name === "login" );
+      var isLogin = ( toState.name === 'login' );
       if ( isLogin ) { return; }
       if ( !$rootScope.user ) {
         event.preventDefault();
