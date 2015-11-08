@@ -5,9 +5,9 @@
     .module('app.dashboard')
     .factory('matchservice', matchservice);
 
-  matchservice.$inject = ['logger'];
+  matchservice.$inject = ['$http', 'exception', 'logger'];
 
-  function matchservice (logger) {
+  function matchservice ($http, exception, logger) {
     var service = {
       attemptMatch : attemptMatch,
       connectUsers : connectUsers
@@ -72,9 +72,14 @@
     function sendMessages (email, phone, matchedUser) {
       var response = { success: [] };
       if ( email ) {
-        response.success.push('email');
-        console.log('Sending email to', email, 'and', matchedUser.email, '(not really)');
-      }
+        $http.post('/mailers/notifications/match', { to: [email] }).
+              then(function (success) {
+                response.success.push('email');
+              }).
+              catch(function (error) {
+                return exception.catcher('XHR Failed for sendMessages')(error);
+              });
+      };
 
       if ( phone ) {
         response.success.push('text');
