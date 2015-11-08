@@ -72,18 +72,21 @@
     function sendMessages (email, phone, matchedUser) {
       var response = { success: [] };
       if ( email ) {
-        $http.post('/mailers/notifications/match', { to: [email] }).
-              then(function (success) {
-                response.success.push('email');
-              }).
+        var opts = { to: [email] };
+        response.success.push('email');
+        $http.post('/messages/notifications/match', { email: true, messageOptions: opts }).
               catch(function (error) {
                 return exception.catcher('XHR Failed for sendMessages')(error);
               });
       };
 
       if ( phone ) {
+        var opts = { to: [phone] };
         response.success.push('text');
-        console.log('Sending text message to', phone, 'and', matchedUser.phone, '(not really)');
+        $http.post('/messages/notifications/match', { sms: true, messageOptions: opts }).
+              catch(function (error) {
+                return exception.catcher('XHR Failed for sendMessages')(error);
+              });
       }
 
       return response;

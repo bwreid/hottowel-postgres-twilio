@@ -19,7 +19,7 @@ var Mailer = function () {
   };
 
   this.createTransporter = function (options) {
-    if ( process.env.NODE_ENV === 'dev' || !this.amazonKeysPresent() ){
+    if ( !this.amazonKeysPresent() ){
       return nodemailer.createTransport(stubTransport());
     } else {
       var opt = ( options ) ? _.extend(options, this.options) : this.options;

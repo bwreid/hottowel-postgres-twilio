@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(logger('dev'));
 
 app.use('/api', require('./routes/api'));
-app.use('/mailers', require('./routes/mailers'));
+app.use('/messages', require('./routes/messages'));
 
 console.log('About to crank up node');
 console.log('PORT=' + port);
